@@ -5,9 +5,10 @@ This is demo file upload app
 
         python manage.py test core.tests
 
-## Test via CURL
-First, run development server:
+## Live testing via CURL
+First, prepare database and run development server:
 
+        python manage.py migrate
         python manage.py runserver
 
 List:
@@ -16,11 +17,11 @@ List:
 
 Upload:
 
-        curl http://localhost:8000/api/uploads/ -F username=Bob -F "uploaded_file=@example/test_upload.txt"
+        curl -i http://localhost:8000/api/uploads/ -F username=Bob -F "uploaded_file=@example/test_upload.txt"
 
 Download:
 
-        curl http://localhost:8000/api/uploads/12/zipped/
+        curl -i http://localhost:8000/api/uploads/12/zipped/
         # Or
-        curl http://localhost:8000/api/uploads/12/unzipped/
+        curl -i http://localhost:8000/api/uploads/12/unzipped/
 
