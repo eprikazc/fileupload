@@ -27,7 +27,7 @@ class FileRecordViewSet(
         instance = serializer.save()
         instance.filename = serializer.initial_data['uploaded_file'].name
         instance.save()
-        zip_upload.now(instance.id)
+        zip_upload(instance.id)
 
     @decorators.detail_route(methods=['get'])
     def zipped(self, request, pk):
