@@ -1,4 +1,9 @@
 import os
+
+from tempfile import NamedTemporaryFile
+from zipfile import ZipFile
+
+from django.core.files import File
 from django.db import models
 
 
@@ -14,7 +19,6 @@ class FileRecord(models.Model):
         return '%s: %s' % (self.username, self.uploaded_file.name)
 
     def zip_upload(self):
-        from django.core.files import File
         source_file_name = os.path.basename(self.uploaded_file.path)
         zipped_upload_file_name = prepare_zip_file(self.uploaded_file.path)
         with zipped_upload_file_name:
@@ -24,8 +28,6 @@ class FileRecord(models.Model):
 
 
 def prepare_zip_file(source_file_name):
-    from tempfile import NamedTemporaryFile
-    from zipfile import ZipFile
     target_file_name = NamedTemporaryFile()
     with ZipFile(target_file_name, 'w') as my_zipfile:
         my_zipfile.write(
