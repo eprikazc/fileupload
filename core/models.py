@@ -1,6 +1,31 @@
+import os
 from django.db import models
 
 
 class FileRecord(models.Model):
     username = models.CharField(max_length=30)
     uploaded_file = models.FileField()
+    zipped_file = models.FileField(blank=True, null=True)
+
+    def __str__(self):
+        return '%s: %s' % (self.username, self.uploaded_file.name)
+
+    def zip_upload(self):
+        from django.core.files import File
+        source_file_name = os.path.basename(self.uploaded_file.path)
+        zipped_upload_file_name = prepare_zip_file(self.uploaded_file.path)
+        with zipped_upload_file_name:
+            self.zipped_file.save(
+                source_file_name + '.zip',
+                File(zipped_upload_file_name))
+
+
+def prepare_zip_file(source_file_name):
+    from tempfile import NamedTemporaryFile
+    from zipfile import ZipFile
+    target_file_name = NamedTemporaryFile()
+    with ZipFile(target_file_name, 'w') as my_zipfile:
+        my_zipfile.write(
+            source_file_name,
+            os.path.basename(source_file_name))
+    return target_file_name

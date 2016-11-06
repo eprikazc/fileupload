@@ -11,3 +11,7 @@ class FileRecordViewSet(
         viewsets.GenericViewSet):
     queryset = FileRecord.objects.all()
     serializer_class = FileRecordSerializer
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        instance.zip_upload()
