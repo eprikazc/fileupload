@@ -4,7 +4,7 @@ import stat
 
 from django.http import FileResponse
 from django.utils.http import http_date
-from rest_framework import decorators, mixins, viewsets
+from rest_framework import decorators, mixins, viewsets, response
 
 from core.models import FileRecord
 from core.serializers import CreateFileRecordSerializer, FileRecordSerializer
@@ -31,6 +31,8 @@ class FileRecordViewSet(
     @decorators.detail_route(methods=['get'])
     def zipped(self, request, pk):
         obj = self.get_object()
+        if not obj.zipped_file.name:
+            return response.Response({'message': 'Archive is not ready yet'})
         return self._serve(obj.zipped_file.path, obj.filename + '.zip')
 
     @decorators.detail_route(methods=['get'])
