@@ -8,6 +8,7 @@ from rest_framework import decorators, mixins, viewsets, response
 
 from core.models import FileRecord
 from core.serializers import CreateFileRecordSerializer, FileRecordSerializer
+from core.zip_utils import zip_upload
 
 
 class FileRecordViewSet(
@@ -25,8 +26,8 @@ class FileRecordViewSet(
     def perform_create(self, serializer):
         instance = serializer.save()
         instance.filename = serializer.initial_data['uploaded_file'].name
-        instance.zip_upload()
         instance.save()
+        zip_upload.now(instance.id)
 
     @decorators.detail_route(methods=['get'])
     def zipped(self, request, pk):

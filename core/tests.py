@@ -2,6 +2,7 @@ from django.core.files.base import ContentFile
 from django.test import TestCase
 
 from core.models import FileRecord
+from core.zip_utils import zip_upload
 
 
 class UploadTestCase(TestCase):
@@ -31,7 +32,7 @@ class UploadTestCase(TestCase):
             {'message': 'Archive is not ready yet'})
 
     def test_zipped_ok(self):
-        self.obj.zip_upload()
+        zip_upload.now(self.obj.id)
         res = self.client.get('/api/uploads/1/zipped/')
         self.assertEqual(res.status_code, 200)
         self.assertHeader(res, 'Content-Type', 'application/zip')
