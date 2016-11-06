@@ -1,7 +1,13 @@
-from rest_framework import mixins, viewsets
+import mimetypes
+import os
+import stat
+
+from django.http import FileResponse
+from django.utils.http import http_date
+from rest_framework import decorators, mixins, viewsets
 
 from core.models import FileRecord
-from core.serializers import FileRecordSerializer
+from core.serializers import CreateFileRecordSerializer, FileRecordSerializer
 
 
 class FileRecordViewSet(
@@ -10,8 +16,13 @@ class FileRecordViewSet(
         mixins.RetrieveModelMixin,
         viewsets.GenericViewSet):
     queryset = FileRecord.objects.all()
-    serializer_class = FileRecordSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateFileRecordSerializer
+        return FileRecordSerializer
 
     def perform_create(self, serializer):
         instance = serializer.save()
+        instance.filename = serializer.initial_data['uploaded_file'].name
         instance.zip_upload()

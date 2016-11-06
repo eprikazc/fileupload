@@ -3,18 +3,15 @@ from rest_framework import serializers
 from core.models import FileRecord
 
 
-# class FileRecordSerializer(serializers.ModelSerializer):
-class FileRecordSerializer(serializers.HyperlinkedModelSerializer):
+class CreateFileRecordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FileRecord
-        fields = ('id', 'username', 'uploaded_file', 'filename', 'archive_name')
+        fields = ('id', 'username', 'uploaded_file')
 
-    filename = serializers.SerializerMethodField()
-    archive_name = serializers.SerializerMethodField()
 
-    def get_filename(self, obj):
-        return obj.uploaded_file.name
+class FileRecordSerializer(serializers.ModelSerializer):
 
-    def get_archive_name(self, obj):
-        return obj.zipped_file.name
+    class Meta:
+        model = FileRecord
+        fields = ('id', 'username', 'filename')
