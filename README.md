@@ -1,15 +1,19 @@
 # File upload service
 This is demo file upload app
 
+## Install and run
+
+        pip install -r requirements.txt
+        python manage,py migrate
+        python manage.py runserver
+
+After that you can visit http://localhost:8000/api/ to view self-browseable API
+
 ## Unit testing
 
         python manage.py test core.tests
 
 ## Live testing via CURL
-First, prepare database and run development server:
-
-        python manage.py migrate
-        python manage.py runserver
 
 List:
 
