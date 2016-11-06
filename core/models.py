@@ -4,8 +4,11 @@ from django.db import models
 
 class FileRecord(models.Model):
     username = models.CharField(max_length=30)
-    uploaded_file = models.FileField()
-    zipped_file = models.FileField(blank=True, null=True)
+    # When uploading files with the same name Django will add unique suffix
+    # We use "filename" field to store original (not modified) file name
+    filename = models.CharField(max_length=100)
+    uploaded_file = models.FileField('uploads/', max_length=100)
+    zipped_file = models.FileField('zipped/', blank=True, null=True)
 
     def __str__(self):
         return '%s: %s' % (self.username, self.uploaded_file.name)
