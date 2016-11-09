@@ -10,7 +10,7 @@ class CreateFileRecordSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'uploaded_file')
 
     def to_representation(self, instance):
-        res = super().to_representation(instance)
+        res = super(CreateFileRecordSerializer, self).to_representation(instance)
         res.pop('uploaded_file')
         return res
 
